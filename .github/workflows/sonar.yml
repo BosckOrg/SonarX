@@ -34,17 +34,27 @@ jobs:
         run: |
           echo "SonarQube Quality Gate Status: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
-          # Fetch project status from SonarQube API
-          PROJECT_STATUS=$(curl -u ${{ secrets.SONAR_TOKEN }}: "https://45f9-171-103-29-110.ngrok-free.app/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}" | jq -r '.projectStatus')
+          echo "Debugging: SONAR_HOST_URL"
+          echo ${{ secrets.SONAR_HOST_URL }}
+
+          echo "Debugging: SONAR_PROJECT_KEY"
+          echo ${{ secrets.SONAR_PROJECT_KEY }}
+
+          echo "Debugging: API call"
+          RESPONSE=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}")
+          echo $RESPONSE
+
+          echo "Debugging: jq parsing"
+          echo $RESPONSE | jq '.'
+
+          PROJECT_STATUS=$(echo $RESPONSE | jq -r '.projectStatus')
 
           echo "Quality Gate Details:"
-          echo "$PROJECT_STATUS" | jq '.conditions[]'
+          echo "$PROJECT_STATUS" | jq '.'
 
-          # Display failed conditions
           echo "Failed Conditions:"
           echo "$PROJECT_STATUS" | jq '.conditions[] | select(.status == "ERROR")'
 
-          # If quality gate failed, exit with error
           if [ "${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" = "FAILED" ]; then
             echo "Quality Gate failed. See details above."
             exit 1
