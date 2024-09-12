@@ -1,5 +1,8 @@
 name: SonarQube Analysis
 on:
+  pull_request:
+    branches:
+      - main # or your default branch name
   push:
     branches:
       - main
