@@ -59,3 +59,11 @@ jobs:
             echo "Quality Gate failed. See details above."
             exit 1
           fi
+      - name: Fetch Issues
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          ISSUES=$(curl -s -X GET -u $SONAR_TOKEN: \
+            "https://45f9-171-103-29-110.ngrok-free.app/api/issues/search?projectKeys=${{ secrets.SONAR_PROJECT_KEY }}")
+          echo "SonarQube Issues Report:"
+          echo $ISSUES | jq .
