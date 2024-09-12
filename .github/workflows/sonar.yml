@@ -35,7 +35,7 @@ jobs:
           echo "SonarQube Quality Gate Status: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
           # Fetch project status from SonarQube API
-          PROJECT_STATUS=$(curl -u ${{ secrets.SONAR_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}" | jq -r '.projectStatus')
+          PROJECT_STATUS=$(curl -u ${{ secrets.SONAR_TOKEN }}: "https://ea56-171-103-29-110.ngrok-free.app/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}" | jq -r '.projectStatus')
 
           echo "Quality Gate Details:"
           echo "$PROJECT_STATUS" | jq '.conditions[]'
