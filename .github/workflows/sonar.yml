@@ -35,13 +35,13 @@ jobs:
           echo "SonarQube Quality Gate Status: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
 
           echo "Debugging: SONAR_HOST_URL"
-          echo ${{ secrets.SONAR_HOST_URL }}
+          echo https://45f9-171-103-29-110.ngrok-free.app
 
           echo "Debugging: SONAR_PROJECT_KEY"
           echo ${{ secrets.SONAR_PROJECT_KEY }}
 
           echo "Debugging: API call"
-          RESPONSE=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}")
+          RESPONSE=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: "https://45f9-171-103-29-110.ngrok-free.app/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}")
           echo $RESPONSE
 
           echo "Debugging: jq parsing"
