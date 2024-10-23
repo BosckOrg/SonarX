@@ -6,12 +6,16 @@ import "./App.css";
 const App = () => {
   const [count, setCount] = useState(0);
 
+  if (typeof window === "undefined") {
+   if (typeof globalThis !== "undefined") {
+     if (globalThis.window) {
+       console.log("globalThis.window is defined");
+     }
+   }
+  }
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>{" "}
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>{" "}
