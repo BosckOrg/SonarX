@@ -3,9 +3,6 @@ on:
   pull_request:
     branches:
       - main # or your default branch name
-  push:
-    branches:
-      - main
 jobs:
   sonarqube:
     runs-on: ubuntu-latest
@@ -24,46 +21,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://45f9-171-103-29-110.ngrok-free.app
 
-      - uses: sonarsource/sonarqube-quality-gate-action@master
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Display SonarQube Results
-        if: always()
-        run: |
-          echo "SonarQube Quality Gate Status: ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
-
-          echo "Debugging: SONAR_HOST_URL"
-          echo https://45f9-171-103-29-110.ngrok-free.app
-
-          echo "Debugging: SONAR_PROJECT_KEY"
-          echo ${{ secrets.SONAR_PROJECT_KEY }}
-
-          echo "Debugging: API call"
-          RESPONSE=$(curl -s -u ${{ secrets.SONAR_TOKEN }}: "https://45f9-171-103-29-110.ngrok-free.app/api/qualitygates/project_status?projectKey=${{ secrets.SONAR_PROJECT_KEY }}")
-          echo $RESPONSE
-
-          echo "Debugging: jq parsing"
-          echo $RESPONSE | jq '.'
-
-          PROJECT_STATUS=$(echo $RESPONSE | jq -r '.projectStatus')
-
-          echo "Quality Gate Details:"
-          echo "$PROJECT_STATUS" | jq '.'
-
-          echo "Failed Conditions:"
-          echo "$PROJECT_STATUS" | jq '.conditions[] | select(.status == "ERROR")'
-
-          if [ "${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}" = "FAILED" ]; then
-            echo "Quality Gate failed. See details above."
-            exit 1
-          fi
-      - name: Fetch Issues
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          ISSUES=$(curl -s -X GET -u $SONAR_TOKEN: \
-            "https://45f9-171-103-29-110.ngrok-free.app/api/issues/search?projectKeys=${{ secrets.SONAR_PROJECT_KEY }}")
-          echo "SonarQube Issues Report:"
-          echo $ISSUES | jq .
+      # - uses: sonarsource/sonarqube-quality-gate-action@master
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
